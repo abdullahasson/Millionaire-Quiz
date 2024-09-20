@@ -2,8 +2,8 @@
 import { useEffect , useState , useLayoutEffect } from "react"
 import useSound from "use-sound"
 // sounds
-import play from "../sounds/play.wav"
 import wrong from "../sounds/wrong.wav"
+import wait from "../sounds/wait.mp3"
 import correct from "../sounds/correct.wav"
 
 
@@ -13,9 +13,9 @@ const Trivia = (props) => {
     const [question , setQuestion] = useState(null)
     const [selectedAnswer , setSelectedAnswer] = useState()
     const [className , setClassName] = useState(null)
-    const [letsPlay] = useSound(play)
     const [correctAnswer] = useSound(correct)
     const [wrongAnswer] = useSound(wrong)
+    const [waitMark] = useSound(wait)
 
     const delay = (duration , callback) => {
         setTimeout(() => {
@@ -24,15 +24,18 @@ const Trivia = (props) => {
     }
 
     useEffect(() => {
-        letsPlay()
         setQuestion(data[questionNumber - 1])
-    } , [data , questionNumber , letsPlay])
+    } , [data , questionNumber])
 
     const handelClick = (a) => {
         setSelectedAnswer(a)
         setClassName('active')
 
-        delay(3000 , () => setClassName(a.correct ? 'correct' : 'wrong'))
+        delay(3000 , () => {
+            // waitMark()
+            setClassName(a.correct ? 'correct' : 'wrong')
+        })
+
         delay(5000 , ()=> {
             if (a.correct) {
                 correctAnswer()
